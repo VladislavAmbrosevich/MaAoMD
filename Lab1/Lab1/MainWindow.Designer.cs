@@ -34,6 +34,7 @@
             this.ClassesCountLabel = new System.Windows.Forms.Label();
             this.ClassesCountComboBox = new System.Windows.Forms.ComboBox();
             this.AverageKButton = new System.Windows.Forms.Button();
+            this.MaximinButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DrawAreaPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -114,12 +115,23 @@
             this.AverageKButton.UseVisualStyleBackColor = true;
             this.AverageKButton.Click += new System.EventHandler(this.AverageKButton_Click);
             // 
+            // MaximinButton
+            // 
+            this.MaximinButton.Location = new System.Drawing.Point(666, 223);
+            this.MaximinButton.Name = "MaximinButton";
+            this.MaximinButton.Size = new System.Drawing.Size(99, 24);
+            this.MaximinButton.TabIndex = 6;
+            this.MaximinButton.Text = "Maximin";
+            this.MaximinButton.UseVisualStyleBackColor = true;
+            this.MaximinButton.Click += new System.EventHandler(this.MaximinButton_Click);
+            // 
             // MainWIndow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(785, 481);
+            this.Controls.Add(this.MaximinButton);
             this.Controls.Add(this.AverageKButton);
             this.Controls.Add(this.ClassesCountComboBox);
             this.Controls.Add(this.ClassesCountLabel);
@@ -147,5 +159,6 @@
         private System.Windows.Forms.Label ClassesCountLabel;
         private System.Windows.Forms.ComboBox ClassesCountComboBox;
         private System.Windows.Forms.Button AverageKButton;
+        private System.Windows.Forms.Button MaximinButton;
     }
 }

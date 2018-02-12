@@ -7,8 +7,8 @@ namespace Lab1
 {
     public partial class MainWIndow : Form
     {
-        private readonly List<Area> _savedAreas;
-        private readonly List<Point> _savedPoints;
+        private List<Area> _savedAreas;
+        private List<Point> _savedPoints;
 
 
         public MainWIndow()
@@ -45,6 +45,7 @@ namespace Lab1
 
         private void AverageKButton_Click(object sender, EventArgs e)
         {
+            DrawAreaPictureBox.Refresh();
             CalculateKAverage();
         }
 
@@ -72,6 +73,7 @@ namespace Lab1
                 if (!int.TryParse(PointsCountTextBox.Text, out ptsCount))
                 {
                     MessageBox.Show(@"Please, enter correct count of points", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                     return;
                 }
                 Area.AddPoints(ptsCount);
@@ -116,69 +118,65 @@ namespace Lab1
         }
 
 
-
-
-        private void button2_Click(object sender, EventArgs e)
+        private void MaximinButton_Click(object sender, EventArgs e)
         {
             DrawAreaPictureBox.Refresh();
-            Area area = new Area();
-            Point p;
-            Random rand = new Random();
-            Graphics graph = Graphics.FromHwnd(DrawAreaPictureBox.Handle);
-            SolidBrush brush = new SolidBrush(Color.Black);
-            int areasCount = 0;
-            int ptsCount;
-            int index;
-            List<Area> Areas = new List<Area>();
-            if (!int.TryParse(PointsCountTextBox.Text, out ptsCount))
+            CalculateMaximin();
+        }
+
+
+        private void CalculateMaximin()
+        {
+            DrawAreaPictureBox.Refresh();
+            var area = new Area();
+            var rand = new Random();
+            var graph = Graphics.FromHwnd(DrawAreaPictureBox.Handle);
+            var areas = new List<Area>();
+            if (!int.TryParse(PointsCountTextBox.Text, out var ptsCount))
             {
-                MessageBox.Show("Введите корректное кол-во точек");
+                MessageBox.Show(@"Please, enter correct count of points", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 return;
             }
             Area.AddPoints(ptsCount);
-            index = rand.Next(0, ptsCount - 1);
+            var index = rand.Next(0, ptsCount - 1);
             area.SetCore(Area.GetPoint(index));
             area.SetColor(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
-            Areas.Add(area);
-            areasCount++;
-            double max;
-            double range;
-            max = 0;
-            SetAreas(Areas, ptsCount);
-            Areas[0].GetMax(ref Area.NewCore);
+            areas.Add(area);
+            SetAreas(areas, ptsCount);
+            areas[0].GetMax(ref Area.NewCore);
             area = new Area();
             area.SetCore(Area.NewCore);
             area.SetColor(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
-            areasCount++;
-            Areas.Add(area);
-            bool above = true;
+            areas.Add(area);
+            var above = true;
             while (above)
             {
-                for (int i = 0; i < Areas.Count; i++)
+                foreach (var ar in areas)
                 {
-                    Areas[i].AreaClear();
+                    ar.AreaClear();
                 }
-                SetAreas(Areas, ptsCount);
-                for (int i = 0; i < Areas.Count; i++)
+                SetAreas(areas, ptsCount);
+                foreach (var ar in areas)
                 {
-                    Areas[i].Draw(graph);
+                    ar.Draw(graph);
                 }
-                max = 0;
-                p = new Point();
-                for (int i = 0; i < Areas.Count; i++)
+                double max = 0;
+                var p = new Point();
+                foreach (var ar in areas)
                 {
-                    if (Areas[i].GetMax(ref p) > max)
+                    if (ar.GetMax(ref p) > max)
                     {
-                        max = Areas[i].GetMax(ref Area.NewCore);
+                        max = ar.GetMax(ref Area.NewCore);
                     }
                 }
-                int count = 0;
-                range = 0;
-                for (int i = 0; i < Areas.Count - 1; i++)
+                var count = 0;
+                double range = 0;
+                for (var i = 0; i < areas.Count - 1; i++)
                 {
-                    for (int j = i + 1; j < Areas.Count; j++)
+                    for (var j = i + 1; j < areas.Count; j++)
                     {
-                        range += Math.Sqrt(Math.Pow(Areas[i].Core.X - Areas[j].Core.X, 2) + Math.Pow(Areas[i].Core.Y - Areas[j].Core.Y, 2));
+                        range += Math.Sqrt(Math.Pow(areas[i].Core.X - areas[j].Core.X, 2) + Math.Pow(areas[i].Core.Y - areas[j].Core.Y, 2));
                         count++;
                     }
                 }
@@ -188,15 +186,15 @@ namespace Lab1
                     area = new Area();
                     area.SetCore(Area.NewCore);
                     area.SetColor(rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
-                    Areas.Add(area);
+                    areas.Add(area);
                 }
                 else
                 {
                     above = false;
                 }
             }
-            //SavedAreas = Areas;
-            //SavedPts = Area.getPts();
+            _savedAreas = areas;
+            _savedPoints= Area.GetPts();
         }
     }
 }
